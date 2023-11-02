@@ -1,0 +1,32 @@
+type Query {
+    findAll: [Person]
+    findById(id: ID!): Person
+}
+
+type Mutation {
+    create(personInput: PersonInput!): Person!
+}
+
+input PersonInput {
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    email: String
+}
+
+type Person {
+    id: ID!
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    email: String
+    address: Address
+}
+
+type Address {
+    id: ID!
+    address: String
+    city: String
+    state: String
+    zip: String
+}
