@@ -3,7 +3,7 @@ package me.songha.graphql.basic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -13,12 +13,12 @@ import java.util.List;
 public class PersonController {
     private final PersonRepository personRepository;
 
-    @SchemaMapping(typeName = "Query", value = "findAll")
+    @QueryMapping(value = "findAll")
     public List<Person> findAll() {
         return personRepository.findAll();
     }
 
-    @SchemaMapping(typeName = "Query", value = "findById")
+    @QueryMapping(value = "findById")
     public Person findById(@Argument Long id) {
         return personRepository.findById(id).get();
     }
@@ -26,6 +26,17 @@ public class PersonController {
     @MutationMapping(value = "create")
     public Person create(@Argument PersonDto personDto) {
         return personRepository.save(personDto.toEntity());
+    }
+
+    @MutationMapping(value = "update")
+    public Person update(@Argument PersonDto personDto) {
+        return personRepository.save(personDto.toEntity());
+    }
+
+    @MutationMapping(value = "delete")
+    public int delete(@Argument Long id) {
+        personRepository.deleteById(id);
+        return 1;
     }
 
 }

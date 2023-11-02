@@ -4,14 +4,18 @@ type Query {
 }
 
 type Mutation {
-    create(personInput: PersonInput!): Person!
+    create(personDto: PersonInput): Person
+    update(personDto: PersonInput): Person
+    delete(id: ID!): Int
 }
 
 input PersonInput {
+    id: ID
     firstName: String
     lastName: String
     phoneNumber: String
     email: String
+    addressId: Int
 }
 
 type Person {

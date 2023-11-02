@@ -1,11 +1,13 @@
 package me.songha.graphql.basic;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 public class Person {
@@ -23,7 +25,8 @@ public class Person {
     private Address address;
 
     @Builder
-    public Person(String firstName, String lastName, String phoneNumber, String email, Address address) {
+    public Person(Long id, String firstName, String lastName, String phoneNumber, String email, Address address) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;

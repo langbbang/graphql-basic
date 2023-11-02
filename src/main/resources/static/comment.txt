@@ -1,0 +1,1 @@
+1. Controller의 Argument 변수 이름과 schema.graphqls의 파라미터 이름은 동일해야 함.
