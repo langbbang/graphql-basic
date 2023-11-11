@@ -1,0 +1,56 @@
+* GraphQL의 구조
+
+1. 쿼리/뮤테이션 (query/mutation)
+ - 쿼리 : READ
+ - 뮤테이션 : CREATE, UPDATE, DELETE
+
+
+2. GraphQL 에서 file 형식 전송이 복잡한 이유
+ - REST API 에서는 file 형식의 데이터를 전송할 때 ContentType 으로 multipart/form-data 를 사용하지만,
+   (여기서 ContentType 이란, body 에 실리는 데이터 타입으로 서버에서 형식에 맞춰서 parsing 을 진행함)
+   GraphQL 의 쿼리는 항상 json 형식을 따르기 때문에 ContentType 으로 application/json 을 사용해야 함
+   그래서 두 데이터 형식의 차이를 매꿔줄 미들웨어가 필요하다.
+
+
+3. GraphQL 은 어떤 한계를 넘으려고 하는가?
+ - 고정 구조 데이터 교환
+   REST API 는 클라이언트 요청이 고정된 구조를 따라야 리소스를 수신할 수 있다.
+   이 엄격한 구조는 사용하기 쉽지만 필요한 데이터를 정확히 교환하기에 항상 가장 효율적인 수단인 것은 아니다.
+ - 오버페칭 및 언더페칭 (Over-Fetching, Under-Fetching)
+   - REST API 는 항상 전체 데이터 세트를 반환한다.
+     예를 들어 REST API 의 'Person 객체'로부터는 그 사람의 이름, 생년월일, 주소 및 전화번호를 받는다.
+     전화번호만 있으면 이 모든 데이터를 (필요하지 않더라도) 얻게 된다.
+   - 또 다른 케이스로, 개인의 전화번호를 이용하여 마지막 구매 내역을 알려면 여러 개의 REST API 요청이 필요하다.
+     '/person' 이라는 URL 은 전화번호를 반환하고 '/purchase' 라는 URL 은 구매 내역을 반환한다.
+     해당 개발자는 API 요청을 처리하기 위해 많은 양의 코드를 작성해야 했고, 원하는 데이터를 위해 많은 요청이 필요하게 되었다.
+     이는 성능과 사용자 경험에 영향을 미치게 되었고, 이런 상황에서 GraphQL이 쿼리 기반 솔루션으로 부상하게 되었다.
+
+
+
+* GraphQL vs REST API
+ - 클라이언트-서버 모델에서 서로 다른 서비스 또는 애플리케이션 간에 데이터를 교환할 수 있는 널리 사용되는 API 아키텍처 스타일
+ - 둘 다 기반 통신 프로토콜인 HTTP를 기반
+
+1. REST : Representational State Transfer
+ - 리소스를 정의하는 URL 형태의 여러 Endpoint 있다.
+ - API 의 Endpoint 를 다음과 같이 구성하면 REST 의 조건을 만족한다.
+ - ex) 글 작성 = POST /posts
+       글 읽기 = GET /posts/{postId}
+       글 수정 = PATCH /posts/{postId}
+       글 삭제 = DELETE /posts/{postId}
+ - 서버가 정의한 고정된 구조로 데이터를 반환한다.
+ - REST 사용이 이점이 되는 케이스
+   1) 애플리케이션 규모가 작고 데이터가 덜 복잡한 경우
+   2) 모든 클라이언트에서 유사하게 사용되는 데이터와 작업이 있는 경우
+   3) 복잡한 데이터 쿼리가 필요 없는 경우
+
+
+2. GraphQL : Graph Query Language
+ - 단일 URL Endpoint 를 사용한다.
+ - 클라이언트 사이드에서 필요한 것을 지정할 수 있으며, 서버는 요청된 데이터를 포함한 JSON 개체로 응답한다.
+ - 고정된 요청과 응답만 필요할 경우에는 Query 로 인해 요청의 크기가 RESTful API 의 경우보다 더 커질 수 있다.
+
+ - GraphQL 사용이 이점이 되는 케이스
+   1) 대역폭이 제한되어 있으며 요청 및 응답 수를 최소화하려는 경우
+   2) 여러 데이터 소스가 있고 이를 하나의 엔드포인트에서 결합하려는 경우
+   3) 고객의 요청이 매우 다양하고 기대하는 응답도 크게 다른 경우
